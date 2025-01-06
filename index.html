@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hourly Image Display</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: black;
+    }
+    img {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+  <img id="hourImage" src="" alt="Hourly Image">
+  <script>
+    // Array of image URLs for each hour (0-23)
+    const images = [
+      'images/00.png', 'images/01.jpg', 'images/02.jpg', 'images/03.jpg',
+      'images/04.jpg', 'images/05.jpg', 'images/06.jpg', 'images/07.jpg',
+      'images/08.jpg', 'images/09.jpg', 'images/10.jpg', 'images/11.jpg',
+      'images/12.jpg', 'images/13.jpg', 'images/00.png', 'images/15.jpg',
+      'images/16.jpg', 'images/17.jpg', 'images/18.jpg', 'images/19.jpg',
+      'images/20.jpg', 'images/21.jpg', 'images/22.jpg', 'images/23.jpg'
+    ];
+
+    function updateImage() {
+      const now = new Date();
+      const currentHour = now.getHours(); // Get current hour (0-23)
+      const imageElement = document.getElementById('hourImage');
+      
+      // Update image source
+      imageElement.src = images[currentHour];
+    }
+
+    // Set initial image and update hourly
+    updateImage();
+    setInterval(updateImage, 60 * 60 * 1000); // Update every hour
+  </script>
+</body>
+</html>
