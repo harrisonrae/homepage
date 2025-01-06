@@ -11,21 +11,22 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: black;
+      background: white
     }
     img {
       width: 100vw;
       height: 100vh;
-      object-fit: cover;
+      object-fit: scale-down;
+      margin-top: 50px;
+      margin-bottom: 50px;
     }
     .date-display {
       position: absolute;
-      bottom: 20px;
+      top: 20px;
       left: 20px;
-      color: white;
+      color: plum;
       font-family: Arial, sans-serif;
       font-size: 24px;
-      background-color: rgba(0, 0, 0, 0.5);
       padding: 10px 15px;
       border-radius: 5px;
     }
@@ -39,7 +40,7 @@
     const images = Array.from({ length: 365 }, (_, i) => `images/day${i + 1}.png`);
 
     // Fallback image URL
-    const fallbackImage = 'images/fallback.png';
+    const fallbackImage = 'images/day23.png';
 
     function updateImageAndDate() {
       const now = new Date();
