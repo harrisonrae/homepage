@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -11,7 +11,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: white
+      background: white;
     }
     img {
       width: 100vw;
@@ -29,42 +29,93 @@
       font-size: 24px;
       padding: 10px 15px;
       border-radius: 5px;
+      cursor: pointer;
+    }
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      color: black;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 1000;
+    }
+    .modal.active {
+      display: block;
+    }
+    .modal .close-btn {
+      margin-top: 15px;
+      padding: 5px 10px;
+      background-color: black;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <img id="dayImage" src="" alt="Daily Image">
   <div class="date-display" id="dateDisplay"></div>
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <p id="modalText"></p>
+    <button class="close-btn" onclick="closeModal()">Close</button>
+  </div>
   <script>
-    // Array of image URLs for each day (1-365)
     const images = Array.from({ length: 365 }, (_, i) => `images/day${i + 1}.png`);
-
-    // Fallback image URL
     const fallbackImage = 'images/day23.png';
+    let messages = []; // Placeholder for messages
+
+    // Load messages from JSON
+    fetch('messages.json')
+      .then(response => response.json())
+      .then(data => {
+        messages = data;
+      })
+      .catch(error => console.error('Error loading messages:', error));
 
     function updateImageAndDate() {
       const now = new Date();
-      const startOfYear = new Date(now.getFullYear(), 0, 0); // Jan 1 of the current year
+      const startOfYear = new Date(now.getFullYear(), 0, 0);
       const diff = now - startOfYear;
-      const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24)); // Day of the year (0-364)
-      
+      const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+
       // Update image
       const imageElement = document.getElementById('dayImage');
       const currentImage = images[dayOfYear];
       imageElement.src = currentImage;
 
-      // Use fallback image if the current image fails to load
       imageElement.onerror = () => {
         imageElement.src = fallbackImage;
       };
 
       // Update date display
-      const options = { month: 'long', day: 'numeric' }; // Format: "Month Day"
+      const options = { month: 'long', day: 'numeric' };
       const dateDisplay = document.getElementById('dateDisplay');
       dateDisplay.textContent = now.toLocaleDateString('en-US', options);
+
+      // Attach click event to open modal with the message for the day
+      dateDisplay.onclick = () => openModal(messages[dayOfYear] || "No message available for today.");
     }
 
-    // Set initial image and date
+    function openModal(message) {
+      const modal = document.getElementById('modal');
+      const modalText = document.getElementById('modalText');
+      modalText.textContent = message;
+      modal.classList.add('active');
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('modal');
+      modal.classList.remove('active');
+    }
+
     updateImageAndDate();
   </script>
 </body>
