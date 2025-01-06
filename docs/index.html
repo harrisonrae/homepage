@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Image Display</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: black;
+    }
+    img {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+    }
+    .date-display {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 24px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px 15px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <img id="dayImage" src="" alt="Daily Image">
+  <div class="date-display" id="dateDisplay"></div>
+  <script>
+    // Array of image URLs for each day (1-365)
+    const images = Array.from({ length: 365 }, (_, i) => `images/day${i + 1}.png`);
+
+    // Fallback image URL
+    const fallbackImage = 'images/fallback.png';
+
+    function updateImageAndDate() {
+      const now = new Date();
+      const startOfYear = new Date(now.getFullYear(), 0, 0); // Jan 1 of the current year
+      const diff = now - startOfYear;
+      const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24)); // Day of the year (0-364)
+      
+      // Update image
+      const imageElement = document.getElementById('dayImage');
+      const currentImage = images[dayOfYear];
+      imageElement.src = currentImage;
+
+      // Use fallback image if the current image fails to load
+      imageElement.onerror = () => {
+        imageElement.src = fallbackImage;
+      };
+
+      // Update date display
+      const options = { month: 'long', day: 'numeric' }; // Format: "Month Day"
+      const dateDisplay = document.getElementById('dateDisplay');
+      dateDisplay.textContent = now.toLocaleDateString('en-US', options);
+    }
+
+    // Set initial image and date
+    updateImageAndDate();
+  </script>
+</body>
+</html>
